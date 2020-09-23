@@ -15,7 +15,7 @@ class TestPage extends React.Component{
 
     clickEvent = () => {
       console.log('log click event..', this.props);
-      this.props.history.push("/");
+      this.props.history.push("/commentPage");
     };
     render() {
         return (

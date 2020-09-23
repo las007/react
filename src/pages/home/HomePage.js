@@ -7,8 +7,6 @@ import {toConnect} from "@/action/toConnect";
 import request from "@/utils/request"
 // import Login from "@/Login"
 
-import axios from "axios";
-
 class HomePage extends React.Component {
     constructor(props) {
         super(props)
@@ -39,21 +37,8 @@ class HomePage extends React.Component {
     };
     toRequest = () => {
         console.log('submit request..')
-        /*request({
-            url: '/api/getHomePage',
-            data: {}
-        });*/
-        /*axios({
-            url: '/api/getHomePage',
-            // url: 'http:localhost:3010/getHomePage',
-            headers: {
-              kitToken: 'abcdefghijklmn...'
-            },
-            data: {}
-        });*/
         request({
             url: '/api/getHomePage',
-            // url: 'http:localhost:3010/getHomePage',
             headers: {
                 kitToken: 'abcdefghijklmn...'
             },

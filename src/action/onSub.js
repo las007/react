@@ -20,3 +20,18 @@ export const onSub = (username, password) => {
         }
     }
 };
+
+export const GET_USER_INFO = 'GET_USER_INFO';
+export const getUserInfo = () => {
+    return {
+        type: GET_USER_INFO,
+        payload: {},
+        axiosPayload: {
+            options: {
+                url: '/test/public/getPublicKey',
+                method: 'get',
+                data: {}
+            }
+        }
+    }
+};

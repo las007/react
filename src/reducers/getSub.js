@@ -26,6 +26,17 @@ console.log('log onSub type..', actions);
 export default createReducers({}, {}, {
     [actions.ON_SUBMIT_LOGIN]: (state, action) => {
         console.log('log state123..', state, action)
-        return state
+        return {
+            ...state,
+            submitMsg: action.payload
+        }
+    },
+
+    [actions.GET_USER_INFO]: (state, action) => {
+        console.log('log userInfo..', state, action);
+        return {
+            ...state,
+            userInfo: action.payload
+        }
     }
 })

@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlPlugin = require('html-webpack-plugin');
 // const nodeExternals = require('webpack-node-externals');
+
 module.exports = {
     devtool: 'inline-source-map',
     entry: {
@@ -57,6 +58,14 @@ module.exports = {
                     '^/weather': '/'
                 }
             },
+            '/test': {
+                target: 'http://localhost:8086',
+                changeOrigin: true,
+                // ws: true,
+                pathRewrite: {
+                    '^/test': '/'
+                }
+            },
             '/getWeather': {
                 target: 'https://yiketianqi.com',
                 changeOrigin: true,
@@ -75,7 +84,8 @@ module.exports = {
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new HtmlPlugin({
-            template: 'src/index.html'
+            template: 'src/index.html',
+            favicon: './src/static/favicon.ico' //favicon.ico文件路径
         })
     ]
 };
