@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Form, Input, Button } from "antd";
-import {onSub, getUserInfo} from "@/action/onSub";
+import {onSub, getPublicKey} from "@/action/onSub";
 import { Link } from "react-router-dom";
 import "./Login.less";
 import PropTypes from "prop-types"
@@ -20,14 +20,27 @@ class Login extends React.Component {
     componentDidMount() {
         console.log('log login did..', this.props);
         // this.props.onSub();
-        this.props.getUserInfo()
+        this.props.getPublicKey()
     }
     componentWillReceiveProps(nextProps, nextContext) {
+        console.log('log nextProps..', nextProps);
+        const { submitMsg, userInfo } = nextProps.getSubmit;
+        console.log('log next result..', submitMsg, userInfo);
+
+        if (nextProps.logout.data.code === 200) {
+            this.props.history.push('/');
+        }else if (submitMsg && submitMsg.data.code === 200) {
+            this.props.history.push('/home');
+            const token = submitMsg.data.data.token;
+            console.log('log token...', token);
+            localStorage.setItem('token', token);
+        }
+
         Promise.resolve(nextProps.getSubmit).then(result => {
-            if (result.data && result.data.code === 20000) {
+            if (result.data && result.data.code === 200) {
                 this.props.history.push('/commentPage');
                 return result.data
-            }else if (result.data && result.data.code === 50001) {
+            }else if (result.data && result.data.code === 501) {
                 return null;
             }
         });
@@ -37,12 +50,18 @@ class Login extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 this.props.onSub(values.username, values.password);
-                this.props.getUserInfo();
+                // this.props.getPublicKey();
             }
         });
     };
     render() {
         console.log('log getSubmit2..', this.props.getSubmit, this.props.form);
+
+        const { submitMsg, userInfo } = this.props.getSubmit;
+
+        if (submitMsg && submitMsg.data.code === 200) {
+            // this.props.history.push('/home');
+        }
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="login">
@@ -81,7 +100,7 @@ class Login extends React.Component {
                                 )}
                             </FormItem>
                             <FormItem className="form-button">
-                                <Button type="primary" htmlType="submit" onClick={this.onSubmit}>
+                                <Button type="primary" htmlType="submit">
                                     <a>立即登录</a>
                                 </Button>
                             </FormItem>
@@ -109,12 +128,13 @@ Login.contextTypes = {
 const LoginForm = Form.create()(Login);
 
 const mapStateToProps = state => ({
-    getSubmit: state.getSub
+    getSubmit: state.getSub,
+    logout: state.getMsg.logout
 });
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         onSub,
-        getUserInfo
+        getPublicKey
     }, dispatch)
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

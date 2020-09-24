@@ -20,7 +20,18 @@ import * as toConnect from '../action/toConnect';
 
 export default createReducers({}, {}, {
     [toConnect.TO_CONNECT]: (state, action) => {
-        console.log('to connect..', state, action)
-        return action.payload;
+        console.log('to connect..', state, action);
+        return {
+            ...state,
+            connection: action.payload
+        }
+    },
+
+    [toConnect.TO_LOG_OUT]: (state, action) => {
+        console.log('log to logout..', state, action);
+        return {
+            ...state,
+            logout: action.payload
+        }
     }
 })

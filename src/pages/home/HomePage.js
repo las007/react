@@ -3,7 +3,7 @@ import './HomePage.less';
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {toConnect} from "@/action/toConnect";
+import {toConnect, toLogout} from "@/action/toConnect";
 import request from "@/utils/request"
 // import Login from "@/Login"
 
@@ -50,6 +50,11 @@ class HomePage extends React.Component {
     toLogin = () => {
         this.props.history.push('/login');
     };
+    logout = () => {
+        console.log('log to logout..');
+        localStorage.removeItem('token');
+        this.props.actionLogout();
+    };
 
     render() {
         return (
@@ -68,17 +73,20 @@ class HomePage extends React.Component {
                 {/*{ <Login {...this.props}/> }*/}
                 <hr/>
                 <button onClick={this.toLogin}>toLogin</button>
+                <button onClick={this.logout}>logout</button>
             </div>
         )
     }
 }
 
 const mapStateToPeops = state => ({
-    connectMsg: state.getMsg
+    connectMsg: state.getMsg.connection,
+    logout: state.getMsg.logout
 });
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
-        actionConnect: toConnect
+        actionConnect: toConnect,
+        actionLogout: toLogout
     }, dispatch);
 }
 export default connect(mapStateToPeops, mapDispatchToProps)(HomePage)

@@ -10,7 +10,7 @@ export const onSub = (username, password) => {
         },
         axiosPayload: {
             options: {
-                url: '/api/postGoToLogin',
+                url: '/api/user/subLogin',
                 method: 'post',
                 data: {
                     username,
@@ -22,13 +22,13 @@ export const onSub = (username, password) => {
 };
 
 export const GET_USER_INFO = 'GET_USER_INFO';
-export const getUserInfo = () => {
+export const getPublicKey = () => {
     return {
         type: GET_USER_INFO,
         payload: {},
         axiosPayload: {
             options: {
-                url: '/test/public/getPublicKey',
+                url: '/api/public/getPublicKey',
                 method: 'get',
                 data: {}
             }

@@ -13,7 +13,9 @@ start.interceptors.request.use(config => {
         config.headers['token'] = token;
         config.headers['api-version'] = 'tp6';
         config.headers['webtype'] = 'API';
-        console.log('log request config..', config);
+        config.headers['Content-Type'] ='application/json;charset=UTF-8';
+
+    console.log('log request config..', config);
         return config;
     // }else {
     //     return 'fail'

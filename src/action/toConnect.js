@@ -4,10 +4,24 @@ export const toConnect = () => {
         type: TO_CONNECT,
         axiosPayload: {
             options: {
-                url: '/api/getHomePage',
+                url: '/api/public/getHomePage',
                 method: 'get',
                 data: {}
             }
         }
     });
+};
+
+export const TO_LOG_OUT = 'TO_LOG_OUT';
+export const toLogout = () => {
+    return ({
+        type: TO_LOG_OUT,
+        axiosPayload: {
+            options: {
+                url: '/api/user/logout',
+                method: 'get',
+                data: {}
+            }
+        }
+    })
 };
