@@ -29,7 +29,7 @@
     box-shadow: 0 0 18px #ccc;
 
     .inputValue {
-      height: 40%;
+      //height: 40%;
       align-items: center;
       //text-align: center;
       padding: 25px 15px;
@@ -88,13 +88,14 @@
     .form-item {
       color: #F56C6C;
       margin-top: 8px;
-      text-align: center;
+      //text-align: center;
+      position: relative;
+      padding-left: 20px;
 
       span {
         color: aqua;
       }
-      .form-item-input {
-        width: 80%;
+      .form-item-input, .form-item-captcha {
         color: #888 !important;
         height: 35px;
         margin-top: 15px;
@@ -102,6 +103,15 @@
         padding-left: 10px;
         outline: none;
         background-color: #eee;
+      }
+      .form-item-input {
+        width: 80%;
+      }
+      .form-item-captcha {
+        width: 40%;
+      }
+      .form-item-img {
+        position: absolute;
       }
       .ant-form-explain {
         position: absolute;

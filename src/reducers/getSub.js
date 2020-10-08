@@ -38,5 +38,13 @@ export default createReducers({}, {}, {
             ...state,
             userInfo: action.payload
         }
+    },
+
+    [actions.PO_GET_CAPTCHA]: (state, action) => {
+        console.log('log get captcha again..', state, action);
+        return {
+            ...state,
+            captchaInfo: action.payload
+        }
     }
 })

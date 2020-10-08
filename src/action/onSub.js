@@ -1,6 +1,6 @@
 export const ON_SUBMIT_LOGIN = 'ON_SUBMIT_LOGIN';
-export const onSub = (username, password) => {
-    console.log('log onSub..', username, password);
+export const onSub = (item) => {
+    console.log('log onSub..', item);
     return {
         type: "ON_SUBMIT_LOGIN",
         payload: {
@@ -13,8 +13,11 @@ export const onSub = (username, password) => {
                 url: '/api/user/subLogin',
                 method: 'post',
                 data: {
-                    username,
-                    password
+                    username: item.username,
+                    password: item.password,
+                    publicKey: item.publicKey,
+                    isLogout: item.isLogout,
+                    captcha: item.captcha
                 }
             }
         }
@@ -29,6 +32,21 @@ export const getPublicKey = () => {
         axiosPayload: {
             options: {
                 url: '/api/public/getPublicKey',
+                method: 'get',
+                data: {}
+            }
+        }
+    }
+};
+
+export const PO_GET_CAPTCHA = 'PO_GET_CAPTCHA';
+export const getCaptcha = () => {
+    return {
+        type: PO_GET_CAPTCHA,
+        payload: {},
+        axiosPayload: {
+            options: {
+                url: '/api/public/captcha',
                 method: 'get',
                 data: {}
             }

@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {toConnect, toLogout} from "@/action/toConnect";
+import { getArticle, getTitleImage, getQuestion } from "@/action/articles";
+import { Carousel } from "antd";
+import {onSub} from "@/action/onSub";
 import request from "@/utils/request"
 // import Login from "@/Login"
 
@@ -21,10 +24,17 @@ class HomePage extends React.Component {
         //第一次进入页面
         console.log('log this props..', this.props);
         this.props.actionConnect();
+        this.props.article();
+        this.props.question();
+        this.props.titleImage()
     }
     componentWillMount() {
         //页面加载完成
-        console.log('log 22222222');
+        const token = localStorage.getItem('token');
+        console.log('log 22222222', token, token === null, token.length, token === '');
+        if (token.length === 0) {
+            this.props.history.push('/');
+        }
     }
     componentWillReceiveProps(nextProps, nextContext) {
         //每次页面数据更新，此生命周期变动
@@ -54,9 +64,24 @@ class HomePage extends React.Component {
         console.log('log to logout..');
         localStorage.removeItem('token');
         this.props.actionLogout();
+        let item = {isLogout: true};
+        // this.props.onSub(null, null, true);
+        this.props.onSub(item);
+        let that = this;
+        setTimeout(function () {
+            that.props.history.push('/');
+        }, 500);
     };
 
     render() {
+        const contentStyle = {
+            height: '160px',
+            color: '#000',
+            lineHeight: '160px',
+            textAlign: 'center',
+            background: '#364d79',
+            width: '100%'
+        };
         return (
             <div className="container">
                 <p className="content">this is a new home page...</p>
@@ -81,12 +106,17 @@ class HomePage extends React.Component {
 
 const mapStateToPeops = state => ({
     connectMsg: state.getMsg.connection,
-    logout: state.getMsg.logout
+    logout: state.getMsg.logout,
+    articlesInfo: state.articles
 });
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         actionConnect: toConnect,
-        actionLogout: toLogout
+        actionLogout: toLogout,
+        onSub,
+        article: getArticle,
+        question: getQuestion,
+        titleImage: getTitleImage
     }, dispatch);
 }
 export default connect(mapStateToPeops, mapDispatchToProps)(HomePage)

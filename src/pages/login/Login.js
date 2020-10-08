@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Form, Input, Button } from "antd";
-import {onSub, getPublicKey} from "@/action/onSub";
+import { Form, Input, Button, notification, Icon } from "antd";
+import {onSub, getPublicKey, getCaptcha} from "@/action/onSub";
 import { Link } from "react-router-dom";
 import "./Login.less";
 import PropTypes from "prop-types"
@@ -14,26 +14,74 @@ class Login extends React.Component {
         super(props);
         this.state = {
             account: '',
-            password: ''
+            password: '',
+            captchaMsg: '',
+            codeStatus: 0
         };
     }
     componentDidMount() {
         console.log('log login did..', this.props);
         // this.props.onSub();
-        this.props.getPublicKey()
+        this.props.getPublicKey();
+        this.props.getCaptcha();
     }
     componentWillReceiveProps(nextProps, nextContext) {
-        console.log('log nextProps..', nextProps);
-        const { submitMsg, userInfo } = nextProps.getSubmit;
-        console.log('log next result..', submitMsg, userInfo);
+        console.log('log nextProps..', nextProps, nextContext);
+        console.log('log this props2..', this.props);
+        console.log('log this code status..', this.state.codeStatus);
+        const { logout } = nextProps;
+        const { submitMsg, userInfo, captchaInfo } = nextProps.getSubmit;
+        console.log('log next result..', submitMsg, userInfo, logout);
 
-        if (nextProps.logout.data.code === 200) {
-            this.props.history.push('/');
-        }else if (submitMsg && submitMsg.data.code === 200) {
+        const submitMsg2 = this.props.getSubmit.submitMsg;
+        console.log('log submitMsg2..', submitMsg2);
+
+        const getToken = localStorage.getItem('token');
+        console.log('log get token..', getToken);
+
+        if (captchaInfo && captchaInfo.data) {
+            // console.log('log captcha..', captchaInfo.data);
+
+            this.setState({ captchaMsg: captchaInfo.data })
+        }
+
+        if (submitMsg && submitMsg.data.code === 200) {
+            console.log('status login success');
+            //login logout
+            //todo...
             this.props.history.push('/home');
-            const token = submitMsg.data.data.token;
-            console.log('log token...', token);
-            localStorage.setItem('token', token);
+            localStorage.setItem('token', submitMsg.data.data.token);
+        }else if (getToken) {
+            this.props.history.push('/home');
+        }else if (submitMsg && submitMsg.data.code === 503/* && submitMsg2 && submitMsg2.data.code === submitMsg.data.code*/) {
+            console.log('status captcha error..');
+            if (nextProps.getSubmit !== this.props.getSubmit) {
+                notification['warning']({
+                    message: '验证码错误',
+                    description: '请重新输入',
+                    duration: 3.5,
+                    icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+                    style: {
+                        // width: 600,
+                        // marginLeft: 335,
+                        // zIndex: 999,
+                        width: 180,
+                        backgroundColor: "#282c34",
+                        position: "absolute",
+                        top: 10,
+                        left: '50%',
+                        transform: 'translate(-50%, 20%)',
+                        borderRadius: 8,
+                        padding: 10,
+                        textAlign: "center",
+                        color: 'wheat'
+                    },
+                })
+            }
+        }else if (submitMsg && submitMsg.data.code === 501) {
+            if (nextProps.getSubmit !== this.props.getSubmit) {
+                alert(`${submitMsg.data.data}`)
+            }
         }
 
         Promise.resolve(nextProps.getSubmit).then(result => {
@@ -43,25 +91,40 @@ class Login extends React.Component {
             }else if (result.data && result.data.code === 501) {
                 return null;
             }
+        }).then(msg => {
+
         });
     }
 
     onSubmit = () => {
+        const { userInfo } = this.props.getSubmit;
+        console.log('put publicKey..', userInfo);
+
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                this.props.onSub(values.username, values.password);
+                console.log('log submit values..', values);
+                let item = {
+                  username: values.username,
+                  password: values.password,
+                  publicKey: userInfo.data.data,
+                  captcha: values.captcha
+                };
+                this.setState({ codeStatus: 1 });
+                this.props.onSub(item);
                 // this.props.getPublicKey();
             }
         });
+
+        console.log('log submit props..', this.props);
     };
+    getCaptcha = () => {
+        console.log('log getCaptcha...');
+        this.props.getCaptcha()
+    };
+
     render() {
         console.log('log getSubmit2..', this.props.getSubmit, this.props.form);
 
-        const { submitMsg, userInfo } = this.props.getSubmit;
-
-        if (submitMsg && submitMsg.data.code === 200) {
-            // this.props.history.push('/home');
-        }
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="login">
@@ -73,7 +136,7 @@ class Login extends React.Component {
                     <div className="inputValue">
                         <Form onSubmit={this.onSubmit} className="login-submit">
                             <FormItem className="form-item">
-                                <span>账号：</span>
+                                <span>账&nbsp;&nbsp;&nbsp;号：</span>
                                 {getFieldDecorator("username", {
                                     rules: [{ required: true, message: '用户名不能为空！!'}]
                                 })(
@@ -81,7 +144,7 @@ class Login extends React.Component {
                                 )}
                             </FormItem>
                             <FormItem className="form-item">
-                                <span>密码：</span>
+                                <span>密&nbsp;&nbsp;&nbsp;码：</span>
                                 {getFieldDecorator("password", {
                                     rules: [
                                         { required: true, message: 'pw!!!!'},
@@ -98,6 +161,29 @@ class Login extends React.Component {
                                 })(
                                     <Input type="password" placeholder="请输入账户密码.." className="form-item-input"/>
                                 )}
+                            </FormItem>
+                            <FormItem className="form-item">
+                                <span>验证码：</span>
+                                {getFieldDecorator("captcha", {
+                                    rules: [
+                                        { required: true, message: '验证码不能为空！'},
+                                        { validator: (rule, value, callback) => {
+                                                if (!value) {
+                                                    callback();
+                                                } else if (!/^[a-zA-Z0-9_\-~*()!@#$%^.·`,&]+$/.test(value)) {
+                                                    callback(['\'英文字母（区分大小写）、数字，可含半角标点符号·.,-_~ *()!@#$%^&\'']);
+                                                } else {
+                                                    callback();
+                                                }
+                                            }
+                                        }]
+                                })(
+                                    <Input type="text" className="form-item-captcha"/>
+                                )}
+                                {/*<img src="/api/public/captcha" alt="error.." className="form-item-img" onClick={this.getCaptcha}/>*/}
+                                {/*{`${this.state.captchaMsg}`}*/}
+                                <span dangerouslySetInnerHTML={{ __html: this.state.captchaMsg}} className="form-item-img" onClick={this.getCaptcha}></span>
+                                {/*<img src={this.state.captchaMsg} alt="error.." className="form-item-img" onClick={this.getCaptcha}/>*/}
                             </FormItem>
                             <FormItem className="form-button">
                                 <Button type="primary" htmlType="submit">
@@ -134,7 +220,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         onSub,
-        getPublicKey
+        getPublicKey,
+        getCaptcha
     }, dispatch)
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

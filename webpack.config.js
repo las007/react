@@ -37,7 +37,7 @@ module.exports = {
     },
     devServer: {
         contentBase: './build',
-        port: 8083,
+        port: 8010,
         inline: true,
         hot: true,
         host: '0.0.0.0',

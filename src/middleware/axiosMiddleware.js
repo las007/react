@@ -12,7 +12,7 @@ const middleware = ({dispatch}) => next => action => {
     dispatch({type: type + defaultSuffix[0]});
     request(options).then(result => {
         console.log('log result2..', result);
-        if (result.data.code === 20000) {
+        if (result.data.code === 200) {
             if (result) {
                 dispatch({type: type, payload: {...result, ...action.payload}, meta: '异步请求成功'});
             } else {

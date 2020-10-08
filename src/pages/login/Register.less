@@ -1,3 +1,117 @@
 .register-page {
   color: red;
+  position: relative;
+  background: url("../../static/forget_bg2.png") no-repeat center;
+  background-size: cover;
+  height: 100vh;
+
+  .register-content {
+    position: absolute;
+    width: 380px;
+    //height: 580px;
+    border: 2px solid aqua;
+    //margin: 0 auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FFFFFF;
+    box-shadow: 0 0 18px #cccccc;
+
+    .register-title {
+
+    }
+    .register-item {
+      .register-form {
+        width: 92%;
+        //border: 3px solid;
+        margin: 0 auto;
+        text-align: center;
+        padding: 15px 3px;
+        //position: relative;
+
+        .register-age {
+          //position: absolute;
+          /*span {
+            float: left;
+            padding-left: 9px;
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+          }*/
+          position: relative;
+          margin: 15px 3px;
+          height: 35px;
+
+          .age-item {
+            float: left;
+            padding-left: 9px;
+            display: inline-block;
+            height: 35px;
+            line-height: 35px;
+            color: #000;
+          }
+          .register-item-age {
+            float: left;
+            width: 79%;
+            //margin: 13px 3px;
+            height: 35px;
+            outline-color: aquamarine;
+            border-radius: 5px;
+          }
+          .ant-form-explain {
+            position: absolute;
+            font-size: 14px;
+            left: 1%;
+            margin-top: 40px;
+          }
+        }
+
+        .register-item-input {
+          width: 93%;
+          margin: 13px 3px;
+          height: 35px;
+          outline-color: aquamarine;
+          border-radius: 5px;
+        }
+        .ant-form-explain {
+          position: absolute;
+          font-size: 14px;
+          left: 6%;
+          margin-top: -11px;
+        }
+        .register-form-button {
+          text-align: center;
+
+          button {
+            width: 92%;
+            height: 43px;
+            border-radius: 8px;
+            outline: none;
+            margin-top: 15px;
+            background-color: rgba(240, 240, 240, 0.64);
+            font-size: 16px;
+            font-weight: bold;
+
+            a {
+              //color: ghostwhite;
+              display: inline-block;
+              width: 100%;
+              height: 43px;
+              line-height: 43px;
+
+              &:hover {
+                -webkit-transform: translateY(-1px);
+                -ms-transform: translateY(-1px);
+                transform: translateY(-1px);
+                //-webkit-box-shadow: 0 0 3px #999;
+                //box-shadow: 0 0 6px #999;
+                -webkit-transition: all .5s ease-out;
+                transition: all .5s ease-out;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
