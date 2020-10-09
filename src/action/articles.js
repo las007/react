@@ -8,7 +8,7 @@ export const getArticle = item => {
         axiosPayload: {
            options: {
                // url: '/api/public/getArticle',
-               url: '/api/test/answer/getTempCache',
+               url: '/api/answer/getTempCache',
                method: 'get',
                data: {}
            }
@@ -40,10 +40,30 @@ export const getQuestion = () => {
         },
         axiosPayload: {
             options: {
-                url: '/api/public/question/getQuestion',
+                url: '/api/public/getQuestion',
                 method: 'get',
                 data: {}
             }
         }
     }
+};
+
+export const GET_QUESTION_DETAIL = "GET_QUESTION_DETAIL";
+export const getQADetail = (id) => {
+    console.log('log find qa..', id);
+  return {
+      type: GET_QUESTION_DETAIL,
+      payload: {
+          params: {}
+      },
+      axiosPayload: {
+          options: {
+              url: '/api/question/findQA',
+              method: 'post',
+              data: {
+                  id
+              }
+          }
+      }
+  }
 };

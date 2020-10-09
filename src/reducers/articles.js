@@ -19,5 +19,11 @@ export default createReducer({}, {}, {
             ...state,
             questionInfo: action.payload
         }
+    },
+    [conductors.GET_QUESTION_DETAIL]: (state, action) => {
+        return {
+            ...state,
+            QADetail: action.payload
+        }
     }
 })

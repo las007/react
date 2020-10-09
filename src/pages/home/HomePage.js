@@ -9,6 +9,7 @@ import { Carousel } from "antd";
 import {onSub} from "@/action/onSub";
 import request from "@/utils/request"
 // import Login from "@/Login"
+import Header from "@/components/Header"
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -31,49 +32,105 @@ class HomePage extends React.Component {
     componentWillMount() {
         //页面加载完成
         const token = localStorage.getItem('token');
-        console.log('log 22222222', token, token === null, token.length, token === '');
-        if (token.length === 0) {
+        if (token && token.length === 0) {
+            console.log('log 22222222', token, token === null, token.length, token === '');
             this.props.history.push('/');
         }
     }
     componentWillReceiveProps(nextProps, nextContext) {
         //每次页面数据更新，此生命周期变动
         console.log('log nextPros..', nextProps);
+        console.log('log this props2..', this.props);
     }
 
-    handleClick = () => {
-        console.log('log handleClick..', this.props)
-        this.props.history.push("/getState");
+    formateDate(datetime) {
+        function addDateZero(num) {
+            return (num < 10 ? "0" + num : num);
+        }
+        let d = new Date(datetime);
+        const formatDatetime = d.getFullYear() + '-' + addDateZero(d.getMonth() + 1) + '-' + addDateZero(d.getDate()) + ' ' + addDateZero(d.getHours()) + ':' + addDateZero(d.getMinutes()) + ':' + addDateZero(d.getSeconds());
+        return formatDatetime;
     };
-    toRequest = () => {
-        console.log('submit request..')
-        request({
-            url: '/api/getHomePage',
-            headers: {
-                kitToken: 'abcdefghijklmn...'
-            },
-            data: {}
-        }).then(result123 => {
-            console.log('log result123..', result123)
-        });
+    toQuestion() {
+        this.props.history.push('');
+    }
+    goToDetail = d => {
+        // console.log('log didiid..', d);
+      this.props.history.push(`/articles/detail/${d}`);
     };
-    toLogin = () => {
-        this.props.history.push('/login');
+
+    renderList(dataList) {
+        if (dataList) {
+            return (
+                dataList.map(d => {
+                    return (
+                        <div key={d.id}>
+                            <div className="aside-item">
+                                <div className="aside-top">
+                                    <Link to={`/user/info/${d.userId}`}>
+                                        {/*<img src={[require("../../static/back.jpg")]} alt="error.."/>*/}
+                                        <img src={ d.avatar_url } alt="error.."/>
+                                    </Link>
+                                    <Link to={`/question/detail/${d.id}`}><p>{ d.title }</p></Link>
+                                </div>
+                                <div className="aside-bottom">
+                                    <span className="aside-time">{ this.formateDate(d.updatedAt) }</span>
+                                    <span className="aside-praise">{ d.like }赞</span>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                })
+            )
+        }
     };
-    logout = () => {
-        console.log('log to logout..');
-        localStorage.removeItem('token');
-        this.props.actionLogout();
-        let item = {isLogout: true};
-        // this.props.onSub(null, null, true);
-        this.props.onSub(item);
-        let that = this;
-        setTimeout(function () {
-            that.props.history.push('/');
-        }, 500);
+    articlesList(list) {
+        console.log('log dataList..', list);
+        if (list) {
+            return (
+                list.map(d => {
+                    console.log('log ddd..', d);
+                    return (
+                        <div key={d.id}>
+                            <div className="section-item">
+                                <div className="section-left">
+                                    <Link to={`/articles/detail/${d.id}`}>
+                                        {/*<img src={[require(`${d.imageURL}`)]} alt="error.."/>*/}
+                                        {/*<img src={[require(`../../static/back.jpg`)]} alt="error.."/>*/}
+                                        <img src={ d.imageUrl } alt="error"/>
+                                    </Link>
+                                </div>
+                                <div className="section-right">
+                                    {/*<Link to={`/articles/detail/${d.id}`}>*/}
+                                        <div className="item-top" onClick={() => this.goToDetail(d.id)}>
+                                            <a>{ d.title }</a>
+                                            <p>{ d.comment }</p>
+                                        </div>
+                                    {/*</Link>*/}
+                                    <div className="item-bottom">
+                                        <span className="item-tips">
+                                            <Link to={`/user/info/${d.userId}`}>
+                                                {/*<img src={[require("../../static/back.jpg")]} alt="error.."/>*/}
+                                                <img src={ d.avatar_url } alt="error.."/>
+                                            </Link>
+                                        </span>
+                                        <span>eyes{ d.watch }</span>
+                                        <span>praise</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                })
+            )
+        }
     };
 
     render() {
+        console.log('log page props..', this.props);
+
+        const { questionInfo, articles } = this.props.articlesInfo;
+        console.log('log articles', questionInfo, articles);
         const contentStyle = {
             height: '160px',
             color: '#000',
@@ -84,21 +141,62 @@ class HomePage extends React.Component {
         };
         return (
             <div className="container">
-                <p className="content">this is a new home page...</p>
-                <hr/>
-                <button onClick={this.handleClick}>点击跳转页面</button>
-                <input type="button" value="提交"/>
+                { <Header history={this.props.history}/>}
+                <div className="slide-box">
+                    <img src={[require("../../static/back.jpg")]} alt="error.." className="slide-img"/>
+                </div>
+                <div className="section">
+                    <div className="content-box">
+                        <div className="content-box-left">
+                            {questionInfo && questionInfo.data.data ? (
+                                this.renderList(questionInfo && questionInfo.data.data)
+                            ) : (
+                                <div>
+                                    <div className="aside-item">
+                                        <div className="aside-top">
+                                            <img src="#" alt="error.."/>
+                                            <p>暂无内容</p>
+                                        </div>
+                                        <div className="aside-bottom">
+                                            <span className="aside-time">2020-10-09 11:10</span>
+                                            <span className="aside-praise">赞</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                            }
+                        </div>
+                        <div className="content-box-right">
+                            { articles && articles.data.data ? (
+                                this.articlesList(articles && articles.data.data)
+                            ) : (
+                                <div className="section-item">
+                                    {/*<div className="section-left">
+                                        <img src={[require("../../static/back.jpg")]} alt="error.."/>
+                                    </div>
+                                    <div className="section-right">
+                                        <div className="item-top">
+                                            <a>我的足迹我的足迹我的足迹我的足迹我的足迹我的足迹我的足迹我的足迹我的足迹我的足迹我的足迹我的足迹我的足迹我的足迹我的足迹我的足迹</a>
+                                            <p>记录生活的每一步记录生活的每一步记录生活的每一步记录生活的每一步记录生活的每一步记录生活的每一步记录生活的每一步记录生活的每一步记录生活的每一步记录生活的每一步记录生活的每一步记录生活的每一步记录生活的每一步记录生活的每一步记录生活的每一步记录生活的每一步</p>
+                                        </div>
+                                        <div className="item-bottom">
+                                        <span className="item-tips">
+                                            <img src={[require("../../static/back.jpg")]} alt="error.."/>
+                                        </span>
+                                            <span>eyes`~</span>
+                                            <span>praise</span>
+                                        </div>
+                                    </div>*/}
+                                    <h3>暂无内容</h3>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
 
-                <Link to="/getState">
-                    <p>页面跳转</p>
-                </Link>
-
-                <button onClick={this.toRequest}>发起 request 请求</button>
+                <div className="footer"></div>
 
                 {/*{ <Login {...this.props}/> }*/}
-                <hr/>
-                <button onClick={this.toLogin}>toLogin</button>
-                <button onClick={this.logout}>logout</button>
             </div>
         )
     }
@@ -118,5 +216,5 @@ const mapDispatchToProps = dispatch => {
         question: getQuestion,
         titleImage: getTitleImage
     }, dispatch);
-}
+};
 export default connect(mapStateToPeops, mapDispatchToProps)(HomePage)
