@@ -1,5 +1,5 @@
 .register-page {
-  color: red;
+  //color: red;
   position: relative;
   background: url("../../static/forget_bg2.png") no-repeat center;
   background-size: cover;
@@ -9,16 +9,17 @@
     position: absolute;
     width: 380px;
     //height: 580px;
-    border: 2px solid aqua;
+    border: 1px solid aqua;
     //margin: 0 auto;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #FFFFFF;
     box-shadow: 0 0 18px #cccccc;
+    border-radius: 8px;
 
     .register-title {
-
+      padding-left: 22px;
     }
     .register-item {
       .register-form {
@@ -29,6 +30,11 @@
         padding: 15px 3px;
         //position: relative;
 
+        .avatar-uploader {
+          .ant-upload {
+            outline: none;
+          }
+        }
         .register-age {
           //position: absolute;
           /*span {
@@ -57,12 +63,14 @@
             height: 35px;
             outline-color: aquamarine;
             border-radius: 5px;
+            border: 1px solid #797373;
           }
           .ant-form-explain {
             position: absolute;
             font-size: 14px;
             left: 1%;
             margin-top: 40px;
+            color: #F56C6C;
           }
         }
 
@@ -72,6 +80,7 @@
           height: 35px;
           outline-color: aquamarine;
           border-radius: 5px;
+          border: 1px solid #797373;
         }
         .ant-form-explain {
           position: absolute;
@@ -83,14 +92,15 @@
           text-align: center;
 
           button {
-            width: 92%;
+            width: 96%;
             height: 43px;
             border-radius: 8px;
             outline: none;
-            margin-top: 15px;
+            margin: 15px auto;
             background-color: rgba(240, 240, 240, 0.64);
             font-size: 16px;
             font-weight: bold;
+            border: 1px solid #797373;
 
             a {
               //color: ghostwhite;

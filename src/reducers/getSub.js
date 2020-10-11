@@ -32,7 +32,7 @@ export default createReducers({}, {}, {
         }
     },
 
-    [actions.GET_USER_INFO]: (state, action) => {
+    [actions.GET_PUBLIC_KEY]: (state, action) => {
         console.log('log userInfo..', state, action);
         return {
             ...state,
@@ -45,6 +45,12 @@ export default createReducers({}, {}, {
         return {
             ...state,
             captchaInfo: action.payload
+        }
+    },
+    [actions.GET_USER_INFO]: (state, action) => {
+        return {
+            ...state,
+            account: action.payload
         }
     }
 })

@@ -6,10 +6,10 @@ import { bindActionCreators } from "redux";
 import {toConnect, toLogout} from "@/action/toConnect";
 import { getArticle, getTitleImage, getQuestion } from "@/action/articles";
 import { Carousel } from "antd";
-import {onSub} from "@/action/onSub";
+import {onSub, getUserInfo} from "@/action/onSub";
 import request from "@/utils/request"
 // import Login from "@/Login"
-import Header from "@/components/Header"
+import Header from "@/components/Header";
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -18,16 +18,24 @@ class HomePage extends React.Component {
             //设置页面内初始数据
             value: 'resourceData..',
             message: '123',
-            comment: 'comm'
+            comment: 'comm',
+            avatar_img: ''
         }
     }
     componentDidMount() {
         //第一次进入页面
-        console.log('log this props..', this.props);
         this.props.actionConnect();
         this.props.article();
         this.props.question();
-        this.props.titleImage()
+        this.props.titleImage();
+        // this.props.getUserInfo();
+        console.log('log this props..', this.props);
+
+        const { submitMsg } = this.props.getSubmit;
+        if (submitMsg && submitMsg.data.data) {
+            this.setState({ avatar_img: submitMsg.data.data.avatar })
+        }
+        console.log('log header msg..', submitMsg, this.state.avatar_img);
     }
     componentWillMount() {
         //页面加载完成
@@ -41,6 +49,9 @@ class HomePage extends React.Component {
         //每次页面数据更新，此生命周期变动
         console.log('log nextPros..', nextProps);
         console.log('log this props2..', this.props);
+
+        const { account } = this.props.getSubmit;
+        console.log('log account2..', account && account.data.data);
     }
 
     formateDate(datetime) {
@@ -129,8 +140,12 @@ class HomePage extends React.Component {
     render() {
         console.log('log page props..', this.props);
 
-        const { questionInfo, articles } = this.props.articlesInfo;
+        const { questionInfo, articles, submitMsg } = this.props.articlesInfo;
         console.log('log articles', questionInfo, articles);
+        console.log('log img ava..', this.state.avatar_img);
+
+        console.log('log info..', this.state.info);
+
         const contentStyle = {
             height: '160px',
             color: '#000',
@@ -141,7 +156,7 @@ class HomePage extends React.Component {
         };
         return (
             <div className="container">
-                { <Header history={this.props.history}/>}
+                <Header history={this.props.history} submitMsg={this.state.avatar_img}/>
                 <div className="slide-box">
                     <img src={[require("../../static/back.jpg")]} alt="error.." className="slide-img"/>
                 </div>
@@ -149,7 +164,9 @@ class HomePage extends React.Component {
                     <div className="content-box">
                         <div className="content-box-left">
                             {questionInfo && questionInfo.data.data ? (
-                                this.renderList(questionInfo && questionInfo.data.data)
+                                <div>
+                                    { this.renderList(questionInfo && questionInfo.data.data) }
+                                </div>
                             ) : (
                                 <div>
                                     <div className="aside-item">
@@ -205,6 +222,7 @@ class HomePage extends React.Component {
 const mapStateToPeops = state => ({
     connectMsg: state.getMsg.connection,
     logout: state.getMsg.logout,
+    getSubmit: state.getSub,
     articlesInfo: state.articles
 });
 const mapDispatchToProps = dispatch => {
@@ -212,6 +230,7 @@ const mapDispatchToProps = dispatch => {
         actionConnect: toConnect,
         actionLogout: toLogout,
         onSub,
+        getUserInfo,
         article: getArticle,
         question: getQuestion,
         titleImage: getTitleImage

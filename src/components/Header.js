@@ -2,18 +2,34 @@ import React from "react";
 import {connect} from "react-redux";
 import { bindActionCreators } from "redux";
 import {toLogout} from "@/action/toConnect";
-import { onSub } from "@/action/onSub";
+import { onSub, getUserInfo } from "@/action/onSub";
 import request from "@/utils/request";
+
 
 class Header extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            imgUrl: ''
+        };
     }
 
     componentDidMount() {
         console.log('log header..', this.props);
+        this.props.getUserInfo();
     }
     componentWillReceiveProps(nextProps, nextContext) {
+        console.log('log header next props..', nextProps, this.props);
+        const { submitMsg, account } = nextProps.getSubmit;
+
+        console.log('log header msg2..', account);
+        if (nextProps.getSubmit !== this.props.getSubmit) {
+
+        }
+        if (account && account.data.data.avatar_url) {
+            console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.')
+            this.setState({ imgUrl: account.data.data.avatar_url })
+        }
     }
 
 
@@ -55,7 +71,15 @@ class Header extends React.Component {
         const letStyle = {
             fontSize: '16px',
             fontWeight: 'bold'
-        }
+        };
+
+        const { account } = this.props.getSubmit;
+
+
+        console.log('log header state..', this.state);
+        const str = `/api/test/didRoute${'/avatar/upload_02f86c3035d74065d1e09be996b7e27d,upload.jpg'}`;
+        const str2 = `/api/test/didRoute${this.state.imgUrl}`;
+
         return (
             <div style={letStyle}>
                 <p className="content">this is a new home page...</p>
@@ -67,6 +91,9 @@ class Header extends React.Component {
                 <button onClick={this.toLogin}>toLogin</button>
 
                 <button onClick={this.logout}>logout</button>
+                { account && account.data.data.avatar ? (<span>123</span>) : (
+                    <img src={str2} alt="error" style={{ width: '45px', height: '45px', borderRadius: '50%' }}/>
+                )}
 
                 {/*<Link to="/getState">*/}
                 {/*    <p>页面跳转</p>*/}
@@ -78,11 +105,12 @@ class Header extends React.Component {
 }
 
 const mapStateToPeops = state => ({
-
+    getSubmit: state.getSub,
 });
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         onSub,
+        getUserInfo,
         actionLogout: toLogout
     }, dispatch);
 };

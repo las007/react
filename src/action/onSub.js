@@ -24,10 +24,10 @@ export const onSub = (item) => {
     }
 };
 
-export const GET_USER_INFO = 'GET_USER_INFO';
+export const GET_PUBLIC_KEY = 'GET_PUBLIC_KEY';
 export const getPublicKey = () => {
     return {
-        type: GET_USER_INFO,
+        type: GET_PUBLIC_KEY,
         payload: {},
         axiosPayload: {
             options: {
@@ -47,6 +47,21 @@ export const getCaptcha = () => {
         axiosPayload: {
             options: {
                 url: '/api/public/captcha',
+                method: 'get',
+                data: {}
+            }
+        }
+    }
+};
+
+export const GET_USER_INFO = "GET_USER_INFO";
+export const getUserInfo = () => {
+    return {
+        type: GET_USER_INFO,
+        payload: {},
+        axiosPayload: {
+            options: {
+                url: '/api/user/info',
                 method: 'get',
                 data: {}
             }

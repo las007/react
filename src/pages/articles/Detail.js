@@ -8,6 +8,7 @@ class ArtDetail extends React.Component {
     }
 
     componentDidMount() {
+        console.log('log detail props..', this.props);
     }
     componentWillReceiveProps(nextProps, nextContext) {
     }
