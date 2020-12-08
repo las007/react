@@ -142,7 +142,7 @@ class Register extends React.Component {
 
         const { loading, imageUrl } = this.state;
         const showElem = {
-            border: '1px dashed',
+            // border: '1px dashed',
             color: '#000',
             width: '50%',
             height: '91px',
@@ -152,19 +152,19 @@ class Register extends React.Component {
             marginBottom: '11px'
         };
         const imgStyle = {
-            width: '69%',
+            // width: '69%',
             height: '135px',
             borderRadius: '8px',
             cursor: 'pointer'
         };
         const str = "/api/test/didRoute/upload_b906305c59640f75b0335bcb1cce7bd2,upload.jpg";
-        const uploadButton = (
-            <div style={showElem}>
-                <p style={{ marginTop: '25px', marginBottom: '3px', fontSize: '22px', fontWeight: 'bold' }}>+</p>
-                <span>Upload</span>
-                {/*<img src={str} style={imgStyle} alt="error.."/>*/}
-            </div>
-        );
+            const uploadButton = (
+                <div style={showElem}>
+                    <p style={{ marginTop: '25px', marginBottom: '3px', fontSize: '22px', fontWeight: 'bold' }}>+</p>
+                    <span>Upload</span>
+                    {/*<img src={str} style={imgStyle} alt="error.."/>*/}
+                </div>
+            );
 
         return (
             <div className="register-page">
@@ -243,8 +243,8 @@ class Register extends React.Component {
                                 )}
                             </FormItem>
                             <FormItem className="register-form-button">
-                                <Button type="primary" htmlType="submit">
-                                    <a>注册</a>
+                                <Button htmlType="submit" style={{ backgroundColor: 'lightGray' }}>
+                                    <a style={{ color: 'black' }}>注册</a>
                                 </Button>
                             </FormItem>
                         </Form>

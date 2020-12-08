@@ -67,3 +67,12 @@ export const getQADetail = (id) => {
       }
   }
 };
+
+export const TEST_DELIVER = "TEST_DELIVER";
+export const testDeliver = (item) => {
+    console.log('log item3.', item);
+    return {
+        type: TEST_DELIVER,
+        payload: {}
+    }
+};

@@ -12,6 +12,7 @@ import QAIndex from "@/pages/question/Index";
 import UserInfo from "@/pages/user/Info";
 import ArtDetail from "@/pages/articles/Detail"
 import ArtIndex from "@/pages/articles/Index"
+import AddArticle from "@/pages/articles/AddArticle"
 
 export default class ConstRoute extends React.Component {
     constructor(props) {
@@ -42,8 +43,9 @@ export default class ConstRoute extends React.Component {
                 {/*----------------------用户信息-------------------------------------------*/}
                     <Route path="/user/info/:userId" component={ UserInfo }/>
                 {/*----------------------articles-------------------------------------------*/}
-                    <Route path="/articles/index" component={ ArtIndex }/>
-                    <Route path="/articles/detail/:activeId" component={ ArtDetail }/>
+                    <Route path="/articles/index" breadcrumbName="文章" component={ ArtIndex }/>
+                    <Route path="/articles/detail/:activeId" breadcrumbName="文章详情" component={ ArtDetail }/>
+                    <Route path="/articles/create" breadcrumbName="写攻略" component={ AddArticle }/>
                 </Switch>
             </HashRouter>
         )

@@ -11,5 +11,13 @@ export default {
     test: {
         message: '/api/test/getMessage',
         asset: '/api/test/asset'
+    },
+    user: {
+        addArticle: '/api/user/createArticle',
+        userInfo: '/api/user/info',
+        register: '/api/user/register',
+        findPW: '/api/user/findPw',
+        login: '/api/user/login',
+        mine: '/api/user/mine'
     }
 }

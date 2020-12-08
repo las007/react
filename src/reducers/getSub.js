@@ -52,5 +52,36 @@ export default createReducers({}, {}, {
             ...state,
             account: action.payload
         }
+    },
+    [actions.GET_WRITER_INFO]: (state, action) => {
+        return {
+            ...state,
+            writerDetail: action.payload
+        }
+    },
+    [actions.GET_EVENT_DETAIL]: (state, action) => {
+        return {
+            ...state,
+            eventDetail: action.payload
+        }
+    },
+    [actions.PO_HANDLE_LIKE]: (state, action) => {
+        return {
+            ...state,
+            isLike: action.payload
+        }
+    },
+    [actions.ADD_ARTICLE]: (state, action) => {
+        return {
+            ...state,
+            isAddArticle: action.payload
+        }
+    },
+    [actions.TEST_SOME]: (state, action) => {
+        console.log('log test msg.', state, action);
+        return {
+            ...state,
+            testMsg: action.testMsg
+        }
     }
 })

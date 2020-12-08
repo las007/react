@@ -17,7 +17,7 @@ class CommentPage extends React.Component{
         this.props.history.push("/");
     };
     goBack = () => {
-        this.props.history.push("/getState");
+        // this.props.history.push("/getState");
     };
     homePage = () => {
         this.props.history.push('/');

@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import ConstRoute from "./routes"
 import './App.less'
+import store from "./store/index";
 
 class App extends Component {
   constructor(props) {
@@ -10,7 +11,7 @@ class App extends Component {
   render() {
     return (
         <div className="main">
-            <ConstRoute />
+            <ConstRoute store={store}/>
         </div>
     );
   }

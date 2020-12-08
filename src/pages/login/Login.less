@@ -10,6 +10,11 @@
 
   a {
     text-decoration: none;
+    border-color: #666666;
+    outline: none;
+  }
+  button {
+    border-color: #666666;
   }
 
   .contentBox {
@@ -17,13 +22,13 @@
     border-radius: 8px;
     background-color: aliceblue;
     width: 640px;
-    height: 580px;
+    //height: 580px;
     //margin: 0 auto;
     //text-align: center;
     position: absolute;
-    //top: 50%;
+    top: 50%;
     left: 50%;
-    transform: translate(-50%, 20%);
+    transform: translate(-50%, -50%);
     justify-content: space-between;
     flex-direction: column;
     box-shadow: 0 0 18px #ccc;
@@ -154,5 +159,17 @@
       }
     }
 
+  }
+}
+
+.wrap-dots {
+  .ant-notification-notice-message {
+    color: lightgoldenrodyellow;
+  }
+  .ant-notification-notice-close {
+    display: none;
+  }
+  .ant-notification-notice-icon {
+    line-height: 50px;
   }
 }

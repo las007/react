@@ -1,0 +1,63 @@
+.eventDetail {
+  position: relative;
+  padding-bottom: 70px;
+
+  .event-title {
+    position: relative;
+    overflow: hidden;
+
+    .title-img {
+      width: 100%;
+      height: 640px;
+      background-color: #eeeeee;
+
+      img {
+        width: 100%;
+        //height: 380px;
+      }
+    }
+    .content-title {
+      color: white;
+      position: absolute;
+      bottom: 150px;
+      left: 50%;
+      transform: translateX(-80%);
+
+      h2 {
+        color: #ffffff;
+        font-size: 28px;
+        font-weight: bold;
+      }
+    }
+  }
+  .event-content {
+    margin: 10px 35px;
+    text-indent: 2em;
+    .content-title {
+      position: absolute;
+    }
+    .content-writer {
+      width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      top: -60px;
+
+      .writer-info {
+        display: inline-block;
+        vertical-align: bottom;
+        margin-left: 30px;
+        margin-bottom: 30px;
+
+        .updatedAt {
+          font-size: 14px;
+          color: #cccccc;
+          margin-left: 20px;
+        }
+      }
+    }
+
+  }
+  .event-comment {
+    margin: 10px 35px;
+  }
+}

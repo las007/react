@@ -1,14 +1,32 @@
 .container {
-  color: aqua;
+  //color: aqua;
 
   .slide-box {
     //width: 100%;
     //height: 380px;
     background-color: #888888;
+    position: relative;
+
+    .contentStyle {
+      height: 580px;
+      color: #ffffff;
+      line-height: 160px;
+      text-align: center;
+      background: #364d79;
+
+      .carousel-title, .carousel-rich-title {
+        position: absolute;
+        margin-left: 80px;
+      }
+      .carousel-rich-title {
+        top: 45px;
+      }
+    }
 
     .slide-img {
       width: 100%;
-      height: 480px;
+      height: 680px;
+      z-index: -1;
     }
   }
   .section {
@@ -150,9 +168,16 @@
                 &:nth-child(2) {
                   padding-left: 20px;
                 }
-                &:last-child {
+                &:last-child, &:nth-child(3) {
                   float: right;
                 }
+              }
+
+              .anticon {
+                float: right !important;
+                padding-top: 2px;
+                cursor: pointer;
+                outline: none
               }
             }
           }
@@ -163,5 +188,18 @@
   .footer {
     height: 50px;
     background-color: green;
+  }
+}
+// 信息弹框
+.wrap-dots {
+  .ant-notification-notice-message {
+    //color: lightgoldenrodyellow;
+    color: white !important;
+  }
+  .ant-notification-notice-close {
+    display: none;
+  }
+  .ant-notification-notice-icon {
+    line-height: 50px;
   }
 }

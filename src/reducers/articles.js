@@ -25,5 +25,12 @@ export default createReducer({}, {}, {
             ...state,
             QADetail: action.payload
         }
+    },
+    [conductors.TEST_DELIVER]: (state, action) => {
+        console.log('log item4.', state, action);
+        return {
+            ...state,
+            testD: action.payload
+        }
     }
 })

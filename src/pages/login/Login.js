@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Form, Input, Button, notification, Icon } from "antd";
 import {onSub, getPublicKey, getCaptcha} from "@/action/onSub";
+import { testDeliver } from "@/action/articles";
 import { Link } from "react-router-dom";
 import "./Login.less";
 import PropTypes from "prop-types"
@@ -16,14 +17,16 @@ class Login extends React.Component {
             account: '',
             password: '',
             captchaMsg: '',
-            codeStatus: 0
+            codeStatus: 0,
+            isLogin: false
         };
     }
     componentDidMount() {
-        console.log('log login did..', this.props);
+        console.log('log login did..', this.props, this.refs.rmPlayer);
         // this.props.onSub();
         this.props.getPublicKey();
         this.props.getCaptcha();
+        this.props.testDeliver(this.refs.rmPlayer)
     }
     componentWillReceiveProps(nextProps, nextContext) {
         console.log('log nextProps..', nextProps, nextContext);
@@ -45,7 +48,7 @@ class Login extends React.Component {
             this.setState({ captchaMsg: captchaInfo.data })
         }
 
-        if (submitMsg && submitMsg.data.code === 200) {
+        if (submitMsg && submitMsg.data.code === 200 && this.state.isLogin) {
             console.log('status login success');
             //login logout
             //todo...
@@ -61,6 +64,8 @@ class Login extends React.Component {
                     description: '请重新输入',
                     duration: 3.5,
                     icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+                    closeIcon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+                    className: 'wrap-dots',
                     style: {
                         // width: 600,
                         // marginLeft: 335,
@@ -73,8 +78,8 @@ class Login extends React.Component {
                         transform: 'translate(-50%, 20%)',
                         borderRadius: 8,
                         padding: 10,
-                        textAlign: "center",
-                        color: 'wheat'
+                        // textAlign: "center",
+                        color: 'lightgoldenrodyellow'
                     },
                 })
             }
@@ -94,6 +99,21 @@ class Login extends React.Component {
         }).then(msg => {
 
         });
+
+        // 定义键盘事件
+        document.addEventListener('keydown', this.handleKeyDown)
+    }
+    // 在 componentWillUnmount 钩子中移除键盘监听事件
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown)
+    }
+
+    handleKeyDown(e) {
+        console.log('log event.', e)
+        if (e.keyCode === 13) {
+            console.log('log code 13.')
+            this.onSubmit()
+        }
     }
 
     onSubmit = () => {
@@ -112,6 +132,7 @@ class Login extends React.Component {
                 this.setState({ codeStatus: 1 });
                 this.props.onSub(item);
                 // this.props.getPublicKey();
+                this.setState({ isLogin: true })
             }
         });
 
@@ -202,6 +223,7 @@ class Login extends React.Component {
                     </div>
 
                 </div>
+                <audio ref="rmPlayer"/>
             </div>
         )
     }
@@ -215,12 +237,14 @@ const LoginForm = Form.create()(Login);
 
 const mapStateToProps = state => ({
     getSubmit: state.getSub,
-    logout: state.getMsg.logout
+    logout: state.getMsg.logout,
+    testD: state.articles.testD
 });
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         onSub,
         getPublicKey,
+        testDeliver,
         getCaptcha
     }, dispatch)
 };

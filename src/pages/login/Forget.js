@@ -174,7 +174,7 @@ class Forget extends React.Component {
 const ForgetForm = Form.create()(Forget);
 
 const mapStateToProps = state => ({
-    account: state.getState,
+    // account: state.getState,
     findPW: state.findPW
 });
 
