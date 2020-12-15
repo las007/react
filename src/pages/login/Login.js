@@ -56,7 +56,7 @@ class Login extends React.Component {
             localStorage.setItem('token', submitMsg.data.data.token);
         }else if (getToken) {
             this.props.history.push('/home');
-        }else if (submitMsg && submitMsg.data.code === 503/* && submitMsg2 && submitMsg2.data.code === submitMsg.data.code*/) {
+        }else if (submitMsg && submitMsg.data.code === 503 && this.state.isLogin/* && submitMsg2 && submitMsg2.data.code === submitMsg.data.code*/) {
             console.log('status captcha error..');
             if (nextProps.getSubmit !== this.props.getSubmit) {
                 notification['warning']({
@@ -81,7 +81,8 @@ class Login extends React.Component {
                         // textAlign: "center",
                         color: 'lightgoldenrodyellow'
                     },
-                })
+                });
+                this.setState({ isLogin: false })
             }
         }else if (submitMsg && submitMsg.data.code === 501) {
             if (nextProps.getSubmit !== this.props.getSubmit) {
@@ -222,6 +223,9 @@ class Login extends React.Component {
                         </Link>
                     </div>
 
+                </div>
+                <div className="slide-span" style={{ display: 'none' }}>
+                    ▶
                 </div>
                 <audio ref="rmPlayer"/>
             </div>

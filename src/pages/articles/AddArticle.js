@@ -48,17 +48,43 @@ class AddArticle extends React.Component {
             editorInfo: '',
             avatar_url: '',
             loading: false,
-            imageUrl: ''
+            imageUrl: '',
+            isPublish: false
         }
     }
     componentWillReceiveProps(nextProps, nextContext) {
         console.log('log next.', nextProps);
         const { isAddArticle, getMsg } = nextProps;
         console.log('log get msg.', getMsg);
-        if (isAddArticle && isAddArticle.data.code === 200) {
+        if (isAddArticle && isAddArticle.data.code === 200 && this.state.isPublish) {
             notification['success']({
                 message: isAddArticle.data.message,
                 description: '请查看~',
+                duration: 3.5,
+                icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+                closeIcon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+                className: 'wrap-dots',
+                style: {
+                    // width: 600,
+                    // marginLeft: 335,
+                    // zIndex: 999,
+                    width: 180,
+                    backgroundColor: "#282c34",
+                    position: "absolute",
+                    top: 10,
+                    left: '50%',
+                    transform: 'translate(-50%, 20%)',
+                    borderRadius: 8,
+                    padding: 10,
+                    // textAlign: "center",
+                    color: 'lightgoldenrodyellow'
+                },
+            })
+            this.props.history.push('/')
+        } else if (isAddArticle && isAddArticle.data.code === 201 && this.state.isPublish) {
+            notification['success']({
+                message: isAddArticle.data.message,
+                description: '未登录状态~',
                 duration: 3.5,
                 icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
                 closeIcon: <Icon type="smile" style={{ color: '#108ee9' }} />,
@@ -99,7 +125,31 @@ class AddArticle extends React.Component {
     onClickSave = (d) => {
         console.log('log ddd.', d, this.state.editorInfo);
         this.props.form.validateFields((error, value) => {
-            if (!error) {
+            if (Object.keys(this.state.avatar_url).length === 0) {
+                notification['warning']({
+                    message: '提示！',
+                    description: '请设置头图~',
+                    duration: 3.5,
+                    icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+                    closeIcon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+                    className: 'wrap-dots',
+                    style: {
+                        // width: 600,
+                        // marginLeft: 335,
+                        // zIndex: 999,
+                        width: 180,
+                        backgroundColor: "#282c34",
+                        position: "absolute",
+                        top: 10,
+                        left: '50%',
+                        transform: 'translate(-50%, 20%)',
+                        borderRadius: 8,
+                        padding: 10,
+                        // textAlign: "center",
+                        color: 'lightgoldenrodyellow'
+                    },
+                })
+            } else if (!error) {
                 console.log('log val.', value, this.state);
                 if (d === 0) {
                     console.log('log draft.')
@@ -109,6 +159,7 @@ class AddArticle extends React.Component {
                     value.imageUrl = this.state.avatar_url;
                     console.log('log content.', value);
                     this.props.subArticleSave(value)
+                    this.setState({ isPublish: true })
                 }
             }
         })
@@ -286,8 +337,8 @@ class AddArticle extends React.Component {
                 </div>
                 <div className="footer-btn" style={{ marginTop: '20px', marginRight: '45px' }}>
                     <Button className="common-btn" style={{ margin: '1px 15px' }} onClick={() => this.onClickSave(0)}>保存草稿</Button>
-                    <Button className="common-btn" onClick={() => this.onClickSave(1)}>发布攻略</Button>
-                    <Button className="common-btn" onClick={() => this.clickHandle({ text: 'test some' })}>test some</Button>
+                    <Button type="primary" className="common-btn" onClick={() => this.onClickSave(1)}>发布攻略</Button>
+                    {/*<Button className="common-btn" onClick={() => this.clickHandle({ text: 'test some' })}>test some</Button>*/}
                 </div>
             </div>
         )

@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {toConnect, toLogout} from "@/action/toConnect";
-import { getArticle, getTitleImage, getQuestion } from "@/action/articles";
-import { Carousel, Icon, notification, Spin, Button } from "antd";
+import * as articles from "@/action/articles";
+import { Carousel, Icon, notification, Spin, Table, Form, Row } from "antd";
 import {onSub, getUserInfo, isLike} from "@/action/onSub";
 import request from "@/utils/request"
 // import Login from "@/Login"
@@ -25,7 +25,9 @@ class HomePage extends React.Component {
             isLoading: true,
             mineInfo: {},
             eventDetail: {},
-            alreadyLiked: false
+            alreadyLiked: false,
+            clickedHandleLike: false,
+            eventItems: {}
         }
     }
     componentDidMount() {
@@ -54,6 +56,8 @@ class HomePage extends React.Component {
             console.log('log 22222222', token, token === null, token.length, token === '');
             this.props.history.push('/');
         }
+        console.log('log log token.', localStorage.getItem('token'), typeof localStorage.getItem('token'),
+            localStorage.getItem('token') === undefined, localStorage.getItem('token') === null);
     }
     componentWillReceiveProps(nextProps, nextContext) {
         //每次页面数据更新，此生命周期变动
@@ -61,7 +65,7 @@ class HomePage extends React.Component {
         console.log('log this props2..', this.props);
 
         const { account } = this.props.getSubmit;
-        const { getSubmit, articlesInfo } = nextProps
+        const { getSubmit, articlesInfo,isHandleLike } = nextProps
         console.log('log account2..', account && account.data.data);
         if (account && account.data.data) {
             console.log('log get sub.', getSubmit)
@@ -73,11 +77,14 @@ class HomePage extends React.Component {
             this.props.getComment()
             this.setState({ isLoading: false })
         }
-        if (getSubmit && getSubmit.isLike) {
+        if (articlesInfo && articlesInfo.articles) {
+            this.setState({ eventItems: articlesInfo.articles.data })
+        }
+        if (getSubmit && getSubmit.isLike && this.state.clickedHandleLike) {
             // setTimeout(window.location.reload, 3000)
-            window.location.reload();
-            // this.props.getComment()
-
+            // window.location.reload();
+            this.props.getComment()
+            this.setState({ clickedHandleLike: false })
         }
 
         /*if (articlesInfo && articlesInfo.articles) {
@@ -110,13 +117,39 @@ class HomePage extends React.Component {
         newChildNode.height = '200px';
         newChildNode.backgroundColor = '#ff4c60';
         parentNode.appendChild(newChildNode);*/
+        this.setState({ clickedHandleLike: true })
 
 
         let scrollTop = document.body.scrollTop+document.documentElement.scrollTop;
         // let scrollTop= document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;
         console.log('scrollTop', scrollTop);
 
-        if (alreadyLiked) {
+        if (localStorage.getItem('token') === null) {
+            notification['warning']({
+                message: '请登录！',
+                // description: '请重新输入',
+                duration: 0.8,
+                icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+                closeIcon: <span>123</span>,
+                top: '100px',
+                placement: "topRight",
+                className: 'wrap-dots',
+                style: {
+                    width: 180,
+                    backgroundColor: "#282c34",
+                    position: "absolute",
+                    top: scrollTop + 90,
+                    // top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    borderRadius: 8,
+                    padding: 10,
+                    textAlign: "center",
+                    color: '#ffffff',
+                    lineHeight: '50px'
+                },
+            });
+        } else if (alreadyLiked) {
             console.log('log two.', this.state.eventDetail)
             this.props.isLike(this.state.mineInfo.id, false, id);
             this.setState({ isLike: false });
@@ -135,7 +168,7 @@ class HomePage extends React.Component {
                     width: 180,
                     backgroundColor: "#282c34",
                     position: "absolute",
-                    top: scrollTop + 90,
+                    // top: scrollTop + 90,
                     // top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
@@ -166,7 +199,7 @@ class HomePage extends React.Component {
                     width: 180,
                     backgroundColor: "#282c34",
                     position: "absolute",
-                    top: scrollTop + 90,
+                    // top: scrollTop + 90,
                     // top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
@@ -210,7 +243,6 @@ class HomePage extends React.Component {
         if (list) {
             return (
                 list.map(d => {
-                    console.log('log ddd..', d);
                     return (
                         <div key={d.id}>
                             <div className="section-item">
@@ -218,21 +250,22 @@ class HomePage extends React.Component {
                                     <Link to={`/articles/detail/${d.id}`}>
                                         {/*<img src={[require(`${d.imageURL}`)]} alt="error.."/>*/}
                                         {/*<img src={[require(`../../static/back.jpg`)]} alt="error.."/>*/}
-                                        <img src={ d.imageUrl } alt="error"/>
+                                        <img src={ d.imageUrl ?  /\/(upload\w*)/.exec(d.imageUrl) === null ? d.imageUrl : `/api/test/didRoute${d.imageUrl}` : null } alt="error"/>
                                     </Link>
                                 </div>
                                 <div className="section-right">
                                     {/*<Link to={`/articles/detail/${d.id}`}>*/}
                                         <div className="item-top" onClick={() => this.goToDetail(d.id)}>
                                             <a>{ d.title }</a>
-                                            <p>{ d.comment }</p>
+                                            {/*<p dangerouslySetInnerHTML={{__html: d.comment}}></p>*/}
+                                            <p>{ d.richText }</p>
                                         </div>
                                     {/*</Link>*/}
                                     <div className="item-bottom">
                                         <span className="item-tips">
                                             <Link to={`/user/info/${d.userId}`}>
                                                 {/*<img src={[require("../../static/back.jpg")]} alt="error.."/>*/}
-                                                <img src={ d.avatar_url } alt="error.."/>
+                                                <img src={ d.avatar_url ?  /\/(upload\w*)/.exec(d.avatar_url) === null ? d.avatar_url : `/api/test/didRoute${d.avatar_url}` : null } alt="error.."/>
                                             </Link>
                                         </span>
                                         {/*<Icon type="smile" style={{ color: '#108ee9' }} />*/}
@@ -266,53 +299,97 @@ class HomePage extends React.Component {
             console.log('log arti.', result);
         })
     }
+    showTitleImg(dataList) {
+        console.log('log data list.', dataList);
+        if (dataList) {
+            return (
+                <div className="slide-box">
+                    <Carousel autoplay={true} autoplaySpeed={3500} effect="fade">
+                        { dataList.map(item => {
+                            return (
+                                item.isPub === 1 ?
+                                    <div key={item.id}>
+                                        <Link to={`/articles/detail/${item.id}`}>
+                                            <div className="contentStyle">
+                                                <h1 className="carousel-title" style={{ color: 'white', marginTop: '160px', fontWeight: 600 }}>{ item.title }</h1>
+                                                <p className="carousel-rich-title" style={{ marginTop: '190px', width: '80%', fontSize: '20px' }}>{ item.richText }</p>
+                                                <img src={ item.imageUrl ?  /\/(upload\w*)/.exec(item.imageUrl) === null ? item.imageUrl : `/api/test/didRoute${item.imageUrl}` : null } alt="error.." className="slide-img"/>
+                                            </div>
+                                        </Link>
+                                    </div> : null
+                            )
+                        })}
+                    </Carousel>
+                </div>
+            )
+        }
+    }
+    jumpToDetails(id) {
+        this.props.history.push(`/articles/detail/${id}`)
+    }
 
     render() {
-        console.log('log page props..', this.props);
+        console.log('log page props..', this.props, this.state.eventItems);
 
         const { questionInfo, articles, submitMsg } = this.props.articlesInfo;
         console.log('log articles', questionInfo, articles);
         console.log('log img ava..', this.state.avatar_img);
 
+        const TableProps = {
+            style: { marginTop: 0 },
+            className: 'headerBorder',
+            loading: this.state.isLoading,
+            bordered: false,
+            dataSource: this.state.eventItems && this.state.eventItems.data || [],
+            rowKey: (record, index) => index,
+            onChange: (page) => {
+                console.log('log page...', page);
+                // this.getDevicesData({ pageNo: page.current });
+                const obj = { page: { pageNo: page.current }}
+                // this.props.getGuaranteeList(obj)     //json
+                this.setState({
+                    // pageNum: page.current
+                })
+                // this.pageRequest(page.current)           //form
+            },
+            columns: [{
+                title: '列表详情',
+                dataIndex: 'id',
+                render: (text, row) => {
+                    return (
+                        <div className="section-left" style={{ width: '75%', float: 'right', display: "flex", justifyContent: "space-between"}}>
+                            {/*<Link to={`/articles/detail/${text}`} innerRef='div'>*/}
+                                {/*<img src={[require(`${d.imageURL}`)]} alt="error.."/>*/}
+                                {/*<img src={[require(`../../static/back.jpg`)]} alt="error.."/>*/}
+                                <div style={{ width: '35%', cursor: 'pointer' }} onClick={() => this.jumpToDetails(row.id)}>
+                                    <img style={{ width: '100%', height: '175px' }} src={ row.imageUrl ?  /\/(upload\w*)/.exec(row.imageUrl) === null ? row.imageUrl : `/api/test/didRoute${row.imageUrl}` : null } alt="error"/>
+                                </div>
+                                <div style={{ display: 'inline-block', width: '63%', marginLeft: '13px' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <p style={{ color: 'black', fontSize: '20px', cursor: 'pointer' }} onClick={() => this.jumpToDetails(row.id)}>{ row.title }</p>
+                                        <p className="rich-title" onClick={() => this.jumpToDetails(row.id)}>{ row.richText }</p>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <span>
+                                                <img style={{ width: '33px', height: '33px', borderRadius: '50%', cursor: 'pointer' }} src={ row.avatar_url ?  /\/(upload\w*)/.exec(row.avatar_url) === null ? row.avatar_url : `/api/test/didRoute${row.avatar_url}` : null } alt="error"/>
+                                                <span style={{ color: '#4c4c4c', marginLeft: '19px' }}>watch·{ row.watch }</span>
+                                            </span>
+                                            <span>{ row.isLike || 0 }</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {/*</Link>*/}
+                        </div>
+                    )
+                }
+            }],
+        };
+
         return (
             <div className="container">
 
                 <Spin spinning={this.state.isLoading}>
-                    <span>显示文本信息 info</span>
-
-                <Header history={this.props.history} submitMsg={this.state.avatar_img}/>
-                <div className="slide-box">
-                    <Carousel autoplay autoplaySpeed={3500}  effect="fade">
-                        <div>
-                            <div className="contentStyle">
-                                <h1 className="carousel-title">显示文本信息 info</h1>
-                                <p className="carousel-rich-title">副标题简要描述...</p>
-                                <img src={[require("../../static/back.jpg")]} alt="error.." className="slide-img"/>
-                            </div>
-                        </div>
-                        <div>
-                            <div className="contentStyle">
-                                <h1 className="carousel-title">显示文本信息 info</h1>
-                                <p className="carousel-rich-title">副标题简要描述...</p>
-                                <img src={[require("../../static/forget_bg.jpg")]} alt="error.." className="slide-img"/>
-                            </div>
-                        </div>
-                        <div>
-                            <div className="contentStyle">
-                                <h1 className="carousel-title">显示文本信息 info</h1>
-                                <p className="carousel-rich-title">副标题简要描述...</p>
-                                <img src={[require("../../static/forget_bg2.png")]} alt="error.." className="slide-img"/>
-                            </div>
-                        </div>
-                        <div>
-                            <div className="contentStyle">
-                                <h1 className="carousel-title">显示文本信息 info</h1>
-                                <p className="carousel-rich-title">副标题简要描述...</p>
-                                <img src={[require("../../static/register_bg.jpg")]} alt="error.." className="slide-img"/>
-                            </div>
-                        </div>
-                    </Carousel>
-                </div>
+                <Header history={this.props.history} submitMsg={this.state.avatar_img} />
+                    { this.showTitleImg(articles && articles.data.data) }
                 <div className="section">
                     <div className="content-box">
                         <div className="content-box-left">
@@ -366,6 +443,12 @@ class HomePage extends React.Component {
                     </div>
                 </div>
 
+                    <Form>
+                        <Row>
+                            <Table {...TableProps}/>
+                        </Row>
+                    </Form>
+
                 <div className="footer"></div>
 
                 {/*{ <Login {...this.props}/> }*/}
@@ -381,6 +464,8 @@ const mapStateToPeops = state => ({
     connectMsg: state.getMsg.connection,
     logout: state.getMsg.logout,
     getSubmit: state.getSub,
+
+    isHandleLike: state.getSub.isHandleLike,
     articlesInfo: state.articles,
     getMsg: state.getSub.testMsg
 });
@@ -391,9 +476,9 @@ const mapDispatchToProps = dispatch => {
         onSub,
         getUserInfo,
         isLike,
-        getComment: getArticle,
-        question: getQuestion,
-        titleImage: getTitleImage
+        getComment: articles.getArticle,
+        question: articles.getQuestion,
+        titleImage: articles.getTitleImage,
     }, dispatch);
 };
 export default connect(mapStateToPeops, mapDispatchToProps)(HomePage)

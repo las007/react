@@ -19,5 +19,8 @@ export default {
         findPW: '/api/user/findPw',
         login: '/api/user/login',
         mine: '/api/user/mine'
+    },
+    comment: {
+        commentInfo: '/api/article/comment'
     }
 }

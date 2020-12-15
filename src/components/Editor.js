@@ -10,13 +10,16 @@ class Editor extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            editorState: BraftEditor.createEditorState(`<p>Hello World!</p>`),
+            editorState: BraftEditor.createEditorState(`<p style="color: lightgray;">请输入...</p>`),
             outputHTML: `<p></p>`
         }
     }
 
     componentDidMount() {
         console.log('log edit.', this.props)
+        if (this.props.onRef) {
+            this.props.onRef(this)
+        }
     }
     componentWillReceiveProps(nextProps, nextContext) {
     }
@@ -30,12 +33,13 @@ class Editor extends React.Component {
     preview = () => {
         console.log('log preview.', this.props)
         // this.props.getStatus(this.buildPreviewHtml())
-        this.props.getStatus(this.state.outputHTML)
-        // window.open().document.write(this.buildPreviewHtml())
+        // this.props.getStatus(this.state.outputHTML)
+        window.open().document.write(this.buildPreviewHtml())
     };
     handleClick = () => {
-        console.log('log event.')
-    }
+        console.log('log event.');
+        this.setState({ editorState: BraftEditor.createEditorState(`<p style="color: lightgray;">请输入...</p>`) })
+    };
     buildPreviewHtml () {
         return `
       <!Doctype html>
@@ -112,9 +116,9 @@ class Editor extends React.Component {
                 {this.props.isEdit ?
                         <span style={{ cursor: 'pointer', display: 'inline-block', color: 'orange', fontSize: '18px', margin: '25px' }} onClick={this.preview}>文章预览</span>
                         : null}
-                <hr/>
+               {/* <hr/>
                 <p>显示输出内容!</p>
-                <div>{ outputHTML }</div>
+                <div>{ outputHTML }</div>*/}
             </div>
         )
     }

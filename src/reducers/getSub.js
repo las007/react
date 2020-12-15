@@ -23,7 +23,7 @@ export const getSub = function (state = 0, action) {
     return state
 };*/
 console.log('log onSub type..', actions);
-export default createReducers({}, {}, {
+export default createReducers({isHandleLike: false}, {isHandleLike: false}, {
     [actions.ON_SUBMIT_LOGIN]: (state, action) => {
         console.log('log state123..', state, action)
         return {
@@ -68,6 +68,7 @@ export default createReducers({}, {}, {
     [actions.PO_HANDLE_LIKE]: (state, action) => {
         return {
             ...state,
+            isHandleLike: true,
             isLike: action.payload
         }
     },

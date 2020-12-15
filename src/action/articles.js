@@ -76,3 +76,35 @@ export const testDeliver = (item) => {
         payload: {}
     }
 };
+
+// 发布评论
+export const PUB_COMMENT_INFOS = "PUB_COMMENT_INFOS";
+export const pubCommentInfos = (info) => {
+    console.log('log console comment.', info);
+    return {
+        type: PUB_COMMENT_INFOS,
+        axiosPayload: {
+            options: {
+                url: '/api/answer/comment',
+                method: 'post',
+                data: info
+            }
+        }
+    }
+};
+
+// 点赞评论
+export const IS_LIKE_COMMENT = "IS_LIKE_COMMENT";
+export const isLikeComment = (msg) => {
+    console.log('log if comment like.', msg);
+    return {
+        type: IS_LIKE_COMMENT,
+        axiosPayload: {
+            options: {
+                url: '/api/articles/commentlike',
+                method: 'post',
+                data: msg
+            }
+        }
+    }
+};

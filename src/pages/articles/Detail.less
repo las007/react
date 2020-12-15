@@ -59,5 +59,43 @@
   }
   .event-comment {
     margin: 10px 35px;
+
+    .comment-content {
+      width: 74%;
+      border: 1px dashed;
+      border-radius: 15px;
+      height: 106px;
+      margin-bottom: 33px;
+
+      .comment-content-box {
+        padding: 20px;
+        p {
+          font-size: 16px;
+          color: #000;
+        }
+        img {
+          width: 33px;
+          height: 33px;
+          border-radius: 50%;
+        }
+        span {
+          margin-left: 20px;
+        }
+      }
+    }
+  }
+}
+
+// 信息弹框
+.wrap-dots {
+  .ant-notification-notice-message {
+    //color: lightgoldenrodyellow;
+    color: white !important;
+  }
+  .ant-notification-notice-close {
+    display: none;
+  }
+  .ant-notification-notice-icon {
+    line-height: 50px;
   }
 }

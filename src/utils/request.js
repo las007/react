@@ -26,6 +26,10 @@ const capture = (data) => {
 
 start.interceptors.request.use(config => {
     console.log('log config....', config);
+    console.log('log log two.', window.localStorage.getItem('token'))
+    if (window.localStorage.getItem('token') !== null && Object.keys(window.localStorage.getItem('token')).length < 10) {
+        localStorage.removeItem('token')
+    }
 
     /*capture(config).then(result => {
         console.log('log result..', result);
