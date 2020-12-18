@@ -7,6 +7,7 @@ import { onSub, getUserInfo } from "@/action/onSub";
 import request from "@/utils/request";
 import {Icon, notification} from 'antd'
 import './Header.less'
+import InformationPop from "@/components/InformationPop";
 
 
 class Header extends React.Component {
@@ -35,40 +36,15 @@ class Header extends React.Component {
         console.log('log account.', account)
 
         if (account && account.data.data.id) {
-            console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.')
             this.setState({ imgUrl: account.data.data.avatar_url, userId: account.data.data.id });
             if (this.props.isGetInfo) {
                 this.props.userInfo(account.data.data)
             }
         } else if (account && account.data.code === 301) {
-            console.log('log account.', account)
-            notification['warning']({
-                message: account.data.data,
-                description: '请重新登录',
-                duration: 3.5,
-                icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
-                closeIcon: <Icon type="smile" style={{ color: '#108ee9' }} />,
-                className: 'wrap-dots',
-                style: {
-                    // width: 600,
-                    // marginLeft: 335,
-                    // zIndex: 999,
-                    width: 180,
-                    backgroundColor: "#282c34",
-                    position: "absolute",
-                    top: 10,
-                    left: '50%',
-                    transform: 'translate(-50%, 20%)',
-                    borderRadius: 8,
-                    padding: 10,
-                    // textAlign: "center",
-                    color: 'lightgoldenrodyellow'
-                },
-            })
+            InformationPop(account.data.data, '请重新登录');
             localStorage.removeItem('token')
         }
     }
-
 
     handleClick = (item) => {
         console.log('log handleClick..', this.props);
@@ -80,7 +56,11 @@ class Header extends React.Component {
 
     jumpRoute = d => {
         if (d === 0) {
-            this.props.history.push(`/user/info/${this.state.userId}`)
+            if (localStorage.getItem('token') !== null) {
+                this.props.history.push(`/user/info/${this.state.userId}`)
+            } else {
+                this.props.history.push(`/`);
+            }
         } else if (d === 1) {
             this.props.history.push(`/articles/create`)
         } else if (d === 2) {
@@ -102,8 +82,9 @@ class Header extends React.Component {
         }, 500);
     };
     handleMouseOver = e => {
-        console.log('log eeeeeeeeeeeeeeeeee.', e)
-        this.setState({ showModal: 'block' })
+        if (localStorage.getItem('token') !== null) {
+            this.setState({ showModal: 'block' })
+        }
     };
     handleMouseLeave = e => {
         this.setState({ showModal: 'none' })
@@ -112,7 +93,6 @@ class Header extends React.Component {
     render() {
         const { account } = this.props.getSubmit;
 
-        console.log('log header state..', this.state, this.state.imgUrl === '');
         const str = `/api/test/didRoute${'/avatar/upload_02f86c3035d74065d1e09be996b7e27d,upload.jpg'}`;
         let str2;
         if (this.state.imgUrl !== '') {
@@ -125,39 +105,34 @@ class Header extends React.Component {
         return (
             <div className="header-page">
                 <span style={{ marginLeft: '35px', cursor: 'pointer' }}>
-                    <span style={{ margin: 'auto 8px', fontSize: '18px' }} onClick={() => this.handleClick('home')}>首页</span>
-                    <span style={{ margin: 'auto 8px', fontSize: '18px' }}>目的地</span>
-                    <span style={{ margin: 'auto 8px', fontSize: '18px' }}>旅游攻略</span>
-                    <span style={{ margin: 'auto 8px', fontSize: '18px' }}>问答</span>
-                    { localStorage.getItem('token') === null ?
-                        <span style={{ margin: 'auto 8px', fontSize: '18px' }} onClick={() => this.props.history.push('/')}>login</span> :
-                        <span style={{ margin: 'auto 8px', fontSize: '18px' }} onClick={this.logout}>logout</span>}
+                    <span className="header-bar" onClick={() => this.handleClick('home')}>首页</span>
+                    <span className="header-bar">目的地</span>
+                    <span className="header-bar">旅游攻略</span>
+                    <span className="header-bar" onClick={() => this.props.history.push("/question/index")}>问答</span>
                 </span>
 
                 { account && account.data.data.avatar ? (<span>123</span>) : (
                         <div style={{ display: 'inline-block', float: 'right', marginRight: '171px' }} onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
-                            <img src={str2} alt="error" style={{ width: '45px', height: '45px', borderRadius: '50%' }} onClick={() => this.jumpRoute(0)}/>
-                            <span style={{ fontSize: '18px', marginLeft: '15px' }}>{ account && account.data.data.nickName }</span>
+                            <img src={str2} alt="error" className="header-img" onClick={() => this.jumpRoute(0)}/>
+                            <span style={{ fontSize: '18px', marginLeft: '15px' }}>
+                                Hi~！·{ account && account.data.data.nickName ? account.data.data.nickName : <span className="header-bar">请<Link to="/">登录</Link></span> }
+                            </span>
                             <div>
                                 <ul style={{ display: this.state.showModal, position: 'absolute' }}>
                                     {
-                                        localStorage.getItem('token') === null ?
-                                            <span>
-                                                <li className="m-top" onClick={() => this.jumpRoute(0)}>未登录！</li>
-                                                <li className="m-top" onClick={() => this.jumpRoute(1)}>请登录~</li>
-                                                <li className="m-top" onClick={() => this.jumpRoute(2)}>我的草稿箱</li>
-                                            </span> :
+                                        localStorage.getItem('token') === null ? null :
                                             <span>
                                                 <li className="m-top" onClick={() => this.jumpRoute(0)}>个人中心</li>
                                                 <li className="m-top" onClick={() => this.jumpRoute(1)}>去写攻略</li>
                                                 <li className="m-top" onClick={() => this.jumpRoute(2)}>我的草稿箱</li>
+                                                {localStorage.getItem('token') === null ? null : <li className="m-top" onClick={this.logout}>退出</li>}
                                             </span>
                                     }
                                 </ul>
                             </div>
                         </div>
                 )}
-                <hr/>
+                {/*<hr/>*/}
             </div>
         )
     }

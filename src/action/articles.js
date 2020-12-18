@@ -68,6 +68,25 @@ export const getQADetail = (id) => {
   }
 };
 
+// 获取问答详情
+export const GET_QUESTION_INFO = "GET_QUESTION_INFO";
+export const getQuestionInfo = (id) => {
+    console.log('log qa id.', id);
+    return {
+        type: GET_QUESTION_INFO,
+        payload: {
+            params: id
+        },
+        axiosPayload: {
+            options: {
+                url: `/api/question/getQaDetail?id=${id}`,
+                method: 'get',
+                data: {}
+            }
+        }
+    }
+};
+
 export const TEST_DELIVER = "TEST_DELIVER";
 export const testDeliver = (item) => {
     console.log('log item3.', item);

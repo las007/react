@@ -35,14 +35,20 @@ export default class ConstRoute extends React.Component {
                     <Route exact path="/" component={ Login }/>
                     <Route path="/home" component={ HomePage }/>
                     {/*<Route path="/getState" component={ TestPage }/>*/}
+
+                    {/*----------------------用户注册-------------------------------------------*/}
                     <Route path="/forget" component={ Forget } />
                     <Route path="/register" component={ Register }/>
                     <Route path="/commentPage" component={ CommentPage }/>
+
+                    {/*----------------------问答模块-------------------------------------------*/}
                     <Route path="/question/detail/:id" component={ QADetail }/>
                     <Route path="/question/index" component={ QAIndex }/>
-                {/*----------------------用户信息-------------------------------------------*/}
+
+                    {/*----------------------用户信息-------------------------------------------*/}
                     <Route path="/user/info/:userId" component={ UserInfo }/>
-                {/*----------------------articles-------------------------------------------*/}
+
+                    {/*----------------------articles-------------------------------------------*/}
                     <Route path="/articles/index" breadcrumbName="文章" component={ ArtIndex }/>
                     <Route path="/articles/detail/:activeId" breadcrumbName="文章详情" component={ ArtDetail }/>
                     <Route path="/articles/create" breadcrumbName="写攻略" component={ AddArticle }/>

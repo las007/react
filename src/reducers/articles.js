@@ -2,6 +2,17 @@ import * as conductors from "../action/articles";
 import createReducer from "./createReducers";
 import {IS_LIKE_COMMENT} from "../action/articles";
 
+const clearState = {
+    getQuestionInfoData: null,      //获取问答详情数据
+};
+
+const initState = {
+    clearState,
+    viewStatus: {
+        isGetQuestionInfoFetched: false,        //以获取到问答详情数据
+    }
+};
+
 export default createReducer({}, {}, {
     [conductors.GET_ARTICLE_IN_HOMEPAGE]: (state, action) => {
         return {
@@ -25,6 +36,14 @@ export default createReducer({}, {}, {
         return {
             ...state,
             QADetail: action.payload
+        }
+    },
+
+    // 获取问答详情数据
+    [conductors.GET_QUESTION_INFO]: (state, action) => {
+        return {
+            ...state,
+            getQuestionInfoData: action.payload
         }
     },
     [conductors.TEST_DELIVER]: (state, action) => {

@@ -10,6 +10,7 @@ import {onSub, getUserInfo, isLike} from "@/action/onSub";
 import request from "@/utils/request"
 // import Login from "@/Login"
 import Header from "@/components/Header";
+import formatDate from "@/components/formatDate";
 
 
 class HomePage extends React.Component {
@@ -92,17 +93,18 @@ class HomePage extends React.Component {
         }*/
     }
 
-    formateDate(datetime) {
+/*    formatDate(datetime) {
         function addDateZero(num) {
             return (num < 10 ? "0" + num : num);
         }
         let d = new Date(datetime);
-        const formatDatetime = d.getFullYear() + '-' + addDateZero(d.getMonth() + 1) + '-' + addDateZero(d.getDate()) + ' ' + addDateZero(d.getHours()) + ':' + addDateZero(d.getMinutes()) + ':' + addDateZero(d.getSeconds());
-        return formatDatetime;
-    };
-    toQuestion() {
-        this.props.history.push('');
-    }
+        return d.getFullYear()
+                                + '-' + addDateZero(d.getMonth() + 1)
+                                + '-' + addDateZero(d.getDate()) + ' '
+                                + addDateZero(d.getHours()) + ':'
+                                + addDateZero(d.getMinutes()) + ':'
+                                + addDateZero(d.getSeconds());
+    };*/
     goToDetail = d => {
         // console.log('log didiid..', d);
       this.props.history.push(`/articles/detail/${d}`);
@@ -228,7 +230,7 @@ class HomePage extends React.Component {
                                     <Link to={`/question/detail/${d.id}`}><p>{ d.title }</p></Link>
                                 </div>
                                 <div className="aside-bottom">
-                                    <span className="aside-time">{ this.formateDate(d.updatedAt) }</span>
+                                    <span className="aside-time">{ formatDate(d.updatedAt) }</span>
                                     <span className="aside-praise">{ d.isLike }赞</span>
                                 </div>
                             </div>

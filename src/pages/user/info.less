@@ -1,0 +1,137 @@
+.user-info {
+  background-color: #eee;
+
+  .title-image {
+    height: 380px;
+    overflow: hidden;
+  }
+  .content-box {
+    width: 1000px;
+    margin: 0 auto;
+    //overflow: hidden;
+
+    .center-content-menu {
+      //height: 55px;
+      padding-left: 213px;
+      background-color: #fff;
+      overflow: hidden;
+      ul {
+        list-style-type: none;
+        li {
+          width: 100px;
+          height: 58px;
+          line-height: 58px;
+          float: left;
+          text-align: center;
+          cursor: pointer;
+
+          &:hover {
+            color: aquamarine;
+          }
+        }
+      }
+    }
+    .left-side-info {
+      width: 250px;
+      //height: 300px;
+      float: left;
+      background-color: #fff;
+      position: relative;
+      padding: 20px;
+
+      img {
+        display: inline-block;
+        width: 150px;
+        height: 150px;
+        border: 1px solid orange;
+        border-radius: 50%;
+        position: absolute;
+        top: -140px;
+        left: 51px;
+      }
+    }
+    .center-content {
+      //width: 450px;
+      //height: 400px;
+      float: left;
+      margin-left: 20px;
+
+      .content-top {
+        margin-top: 25px;
+        ul {
+          list-style-type: none;
+          background-color: #fff;
+          height: 80px;
+          padding: 20px 0 20px 0;
+          li {
+            width: 172px;
+            //height: 80px;
+            float: left;
+            border-right: 1px solid #eee;
+            text-align: center;
+            cursor: pointer;
+
+            &:hover {
+              color: orange;
+            }
+          }
+        }
+      }
+      .content-bottom {
+        margin-top: 25px;
+        background-color: #fff;
+        padding: 20px 15px 20px 15px;
+
+        .content-infos {
+          width: 700px;
+          //height: 180px;
+          border: 1px dashed;
+          padding: 10px;
+          border-radius: 15px;
+          overflow: hidden;
+          margin-bottom: 20px;
+
+          img {
+            width: 150px;
+            height: 150px;
+            border: 1px solid;
+            display: inline-block;
+            float: left;
+          }
+          .content-msg {
+            display: flex;
+            height: 132px;
+            justify-content: space-between;
+            flex-direction: column;
+            padding-left: 23px;
+            .infos-title {
+              font-size: 18px;
+              color: #000;
+            }
+            .infos-watch {
+              margin-left: 25px;
+            }
+            .infos-like {
+              float: right;
+              margin-right: 30px;
+            }
+            .infos-delete {
+              color: orange;
+              float: right;
+              margin-right: 53px;
+              cursor: pointer;
+              &:hover {
+                color: red;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .footer {
+    height: 55px;
+    background-color: #ffffff;
+    clear: both;
+  }
+}

@@ -4,11 +4,13 @@ import getSub from "./getSub"
 import getRegister from "./getRegister"
 import articles from "./articles"
 import findPW from "./findPW"
+import userMeans from "./userinfo"
 
 export default combineReducers({
     getMsg: toConnect,
     getSub,
     getRegister,
     articles,
-    findPW
+    findPW,
+    userMeans
 })

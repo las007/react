@@ -164,7 +164,9 @@ class ArtDetail extends React.Component {
                 <div style={{ width: '75%' }}>
                     <BraftEditor getStatus={ this.eventStatus } onRef={this.onRef}/>
                 </div>
-                <Button type="primary" style={{ marginTop: '20px', marginRight: '120px', float: 'right' }} onClick={this.pubComment}>发表评论</Button>
+                <Button style={{ marginTop: '20px', marginRight: '120px', float: 'right', border: '1px solid #2d8cf0' }} onClick={() => this.props.history.goBack()}>返回</Button>
+                <Button type="primary" style={{ marginTop: '20px', marginRight: '50px', float: 'right', width: '120px' }} onClick={this.pubComment}>发表评论</Button>
+                <div className="detail-footer" />
             </div>
         )
     }

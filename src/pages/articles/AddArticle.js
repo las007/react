@@ -5,8 +5,10 @@ import { bindActionCreators } from "redux";
 import BraftEditor from "@/components/Editor"
 import {Button, Input, Row, Col, Form, DatePicker, notification, Icon, Upload, message} from "antd";
 import moment from 'moment';
-import * as action from "@/action/onSub"
+import * as action from "@/action/onSub";
+import * as userMeans from "@/action/user";
 import './AddArticle.less'
+import InformationPop from "@/components/InformationPop";
 
 const dateFormat = 'YYYY-MM-DD hh:mm:ss'
 const TextArea = Input.TextArea, FormItem = Form.Item
@@ -82,7 +84,7 @@ class AddArticle extends React.Component {
             })
             this.props.history.push('/')
         } else if (isAddArticle && isAddArticle.data.code === 201 && this.state.isPublish) {
-            notification['success']({
+           /* notification['success']({
                 message: isAddArticle.data.message,
                 description: '未登录状态~',
                 duration: 3.5,
@@ -104,7 +106,8 @@ class AddArticle extends React.Component {
                     // textAlign: "center",
                     color: 'lightgoldenrodyellow'
                 },
-            })
+            })*/
+
         }
     }
 
@@ -126,29 +129,7 @@ class AddArticle extends React.Component {
         console.log('log ddd.', d, this.state.editorInfo);
         this.props.form.validateFields((error, value) => {
             if (Object.keys(this.state.avatar_url).length === 0) {
-                notification['warning']({
-                    message: '提示！',
-                    description: '请设置头图~',
-                    duration: 3.5,
-                    icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
-                    closeIcon: <Icon type="smile" style={{ color: '#108ee9' }} />,
-                    className: 'wrap-dots',
-                    style: {
-                        // width: 600,
-                        // marginLeft: 335,
-                        // zIndex: 999,
-                        width: 180,
-                        backgroundColor: "#282c34",
-                        position: "absolute",
-                        top: 10,
-                        left: '50%',
-                        transform: 'translate(-50%, 20%)',
-                        borderRadius: 8,
-                        padding: 10,
-                        // textAlign: "center",
-                        color: 'lightgoldenrodyellow'
-                    },
-                })
+                InformationPop('提示！', '请设置头图~', true);
             } else if (!error) {
                 console.log('log val.', value, this.state);
                 if (d === 0) {
