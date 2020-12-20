@@ -1,6 +1,6 @@
 .question-detail {
   .qa-detail-content {
-    border: 1px solid;
+    //border: 1px solid;
     width: 1000px;
     margin: 20px auto;
 
@@ -32,16 +32,18 @@
         border: 1px dashed #ccc;
         border-radius: 15px;
         padding: 20px;
-        margin-bottom: 25px;
+        margin-bottom: 20px;
         color: #333;
         min-height: 130px;
       }
     }
 
     .content-bottom {
-      border: 1px dashed;
+      border-top: 1px dashed #ccc;
+      border-bottom: 1px dashed #ccc;
       width: 700px;
-      margin-top: 25px;
+      margin-top: 20px;
+      padding-top: 20px;
       .answer-list-items {
         .answer-item {
           border: 1px dashed #ccc;
@@ -52,6 +54,11 @@
             color: #333;
           }
           .answer-msg {
+            img {
+              width: 33px;
+              height: 33px;
+              border-radius: 50%;
+            }
             .writer-nick-name {
               font-size: 16px;
               margin-left: 15px;
@@ -65,6 +72,16 @@
           }
         }
       }
+    }
+
+    .editor-container {
+      border: 1px dashed #ccc;
+      height: 360px;
+    }
+    .detail-footer {
+      height: 55px;
+      background-color: #ffffff;
+      clear: both;
     }
   }
 }

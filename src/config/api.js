@@ -22,5 +22,11 @@ export default {
     },
     comment: {
         commentInfo: '/api/article/comment'
+    },
+    //回答
+    answer: {
+        answerDataList: '/api/answer/getAnswerList',
+        pubAnswerContent: '/api/answer/pubAnswerContent',
+        subLikeAnswer: '/api/answer/answerLike',
     }
 }

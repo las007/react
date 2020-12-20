@@ -5,6 +5,7 @@ import getRegister from "./getRegister"
 import articles from "./articles"
 import findPW from "./findPW"
 import userMeans from "./userinfo"
+import answer from "./answer"
 
 export default combineReducers({
     getMsg: toConnect,
@@ -12,5 +13,6 @@ export default combineReducers({
     getRegister,
     articles,
     findPW,
-    userMeans
+    userMeans,
+    answer,
 })
